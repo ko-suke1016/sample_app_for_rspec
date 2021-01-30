@@ -6,9 +6,9 @@ RSpec.describe 'validate', type: :model do
   end
 
   it 'タイトルがなければ無効な状態であること' do
-    task_without_title = FactoryBot.build(:task, title: nil)
-    task.valid?
-    expect(task.errors[:title]).to include("can't be blank")
+    task_without_title = FactoryBot.build(:task, title: "")
+    expect(task_without_title).to be_invalid
+    expect(task_without_title.errors[:title]).to include("can't be blank")
   end
 
   it '重複したタイトルなら無効な状態であること' do
@@ -19,8 +19,8 @@ RSpec.describe 'validate', type: :model do
   end
 
   it 'statusがなければ無効な状態であること' do
-    task = FactoryBot.build(:task, status: nil)
-    task.valid?
+    task_without_status = FactoryBot.build(:task, status: nil)
+    expect(task).to be_invalid
     expect(task.errors[:status]).to include("can't be blank")
   end
 
