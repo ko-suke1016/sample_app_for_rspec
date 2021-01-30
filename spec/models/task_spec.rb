@@ -26,8 +26,8 @@ RSpec.describe 'validate', type: :model do
 
   it '他のタイトルであれば有効な状態であること' do
     FactoryBot.create(:task)
-    task = FactoryBot.build(:task)
-    task.valid?
-    expect(FactoryBot.build(:task)).to be_valid
+    task_with_another_title = FactoryBot.build(:task)
+    expect(task_with_another_title).to be_valid
+    expect(task_with_another_title.errors).to be_empty
   end
 end
