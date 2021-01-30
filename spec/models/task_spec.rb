@@ -12,10 +12,10 @@ RSpec.describe 'validate', type: :model do
   end
 
   it '重複したタイトルなら無効な状態であること' do
-    FactoryBot.create(:task)
-    task = FactoryBot.build(:task)
-    task.valid?
-    expect(task.errors[:title]).to include()
+    task = FactoryBot.create(:task)
+    task_with_duplicated_title = FactoryBot.build(:task, title: task.title)
+    expect(task_with_duplicated_title).to be_invalid
+    expect(task_with_duplicated_title.errors[:title]).to  eq ["has already been taken"]
   end
 
   it 'statusがなければ無効な状態であること' do
