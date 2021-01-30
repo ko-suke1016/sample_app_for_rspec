@@ -6,7 +6,7 @@ RSpec.describe 'validate', type: :model do
   end
 
   it 'タイトルがなければ無効な状態であること' do
-    task = FactoryBot.build(:task, title: nil)
+    task_without_title = FactoryBot.build(:task, title: nil)
     task.valid?
     expect(task.errors[:title]).to include("can't be blank")
   end
