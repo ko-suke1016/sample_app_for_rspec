@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Task, type: :model do
+RSpec.describe 'validate', type: :model do
   it 'title,content,status,deadlineがあれば有効な状態であること' do
     expect(FactoryBot.build(:task)).to be_valid
   end
