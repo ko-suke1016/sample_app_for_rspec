@@ -15,13 +15,13 @@ RSpec.describe 'validate', type: :model do
     task = FactoryBot.create(:task)
     task_with_duplicated_title = FactoryBot.build(:task, title: task.title)
     expect(task_with_duplicated_title).to be_invalid
-    expect(task_with_duplicated_title.errors[:title]).to  eq ["has already been taken"]
+    expect(task_with_duplicated_title.errors[:title]).to eq ["has already been taken"]
   end
 
   it 'statusがなければ無効な状態であること' do
     task_without_status = FactoryBot.build(:task, status: nil)
-    expect(task).to be_invalid
-    expect(task.errors[:status]).to include("can't be blank")
+    expect(task_without_status).to be_invalid
+    expect(task_without_status.errors[:status]).to include("can't be blank")
   end
 
   it '他のタイトルであれば有効な状態であること' do
