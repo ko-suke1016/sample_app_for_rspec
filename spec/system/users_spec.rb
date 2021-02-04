@@ -1,19 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe "Users", type: :system do
-  let(:user_a){ build(:user) }
+
   let(:user){ create(:user) }
   let(:other_user){ create(:user) }
-  let(:task){ create(:task)}
 
   describe 'ログイン前' do
     describe 'ユーザー新規登録'
       context 'フォームの入力値が正常' do
         it 'ユーザーの新規作成が成功する' do
           visit sign_up_path
-          fill_in "Email", with: user_a.email
-          fill_in "Password", with: user_a.password
-          fill_in "Password confirmation", with: user_a.password_confirmation
+          fill_in "Email", with: 'admin@example.com'
+          fill_in "Password", with: 'admin'
+          fill_in "Password confirmation", with: 'admin'
           click_button 'SignUp'
           expect(current_path).to eq login_path
           expect(page).to have_content 'User was successfully created.'
@@ -24,8 +23,8 @@ RSpec.describe "Users", type: :system do
         it 'ユーザーの新規作成が失敗する' do
           visit sign_up_path
           fill_in 'Email', with: ''
-          fill_in 'Password', with: user_a.password
-          fill_in 'Password confirmation', with: user_a.password_confirmation
+          fill_in 'Password', with: 'admin'
+          fill_in 'Password confirmation', with: 'admin'
           click_button 'SignUp'
           expect(current_path).to eq users_path
           expect(page).to have_content "Email can't be blank"
@@ -95,13 +94,10 @@ RSpec.describe "Users", type: :system do
     describe 'マイページ' do
       context 'タスクを作成' do
         it '新規作成したタスクが表示される' do
-          visit new_task_path
-          fill_in 'Title', with: task.title
-          fill_in 'Content', with: task.content
-          select task.status, from: 'Status'
-          fill_in 'Deadline', with: task.deadline
-          click_button 'Create Task'
-          expect(page).to have_content "Task was successfully created."
+          create(:task, title: 'タスク', status: :todo, user_id: user.id)
+          visit user_path(user)
+          expect(page).to have_content "タスク"
+          expect(page).to have_content 'todo'
         end
       end
     end

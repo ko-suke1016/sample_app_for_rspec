@@ -1,4 +1,4 @@
-module LoginModule
+module LoginModules
     def login(user)
         visit login_path
         fill_in 'Email', with: user.email
