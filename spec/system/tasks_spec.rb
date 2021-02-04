@@ -42,9 +42,7 @@ RSpec.describe 'Tasks', type: :system do
 
     describe 'ログイン後' do
 
-        before do
-            login(user)
-        end
+        before { login(user) }
         let!(:other_task){ create(:task) }
 
         describe 'タスクの新規登録' do
@@ -81,6 +79,7 @@ RSpec.describe 'Tasks', type: :system do
                     select 'todo', from: 'Status'
                     fill_in 'Deadline', with: task.deadline
                     click_button 'Create Task'
+                    expect(page).to have_content '1 error prohibited this task from being saved'
                     expect(current_path).to eq tasks_path
                     expect(page).to have_content "Title has already been taken"
                 end
@@ -110,6 +109,19 @@ RSpec.describe 'Tasks', type: :system do
                     click_button 'Update Task'
                     expect(current_path).to eq task_path(task)
                     expect(page).to have_content "Title can't be blank"
+                end
+            end
+
+            context '登録済のタイトルが未入力' do
+                it 'タスクの編集が失敗する' do
+                    visit tasks_path
+                    click_on 'Edit'
+                    fill_in 'Title', with: other_task.title
+                    select :todo, from: 'Status'
+                    click_button 'Update Task'
+                    expect(page).to have_content '1 error prohibited this task from being saved'
+                    expect(page).to have_content 'Title has already been taken'
+                    expect(current_path).to eq task_path(task)
                 end
             end
         end
